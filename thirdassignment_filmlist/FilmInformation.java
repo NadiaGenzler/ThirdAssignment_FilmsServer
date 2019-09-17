@@ -26,31 +26,32 @@ public class FilmInformation extends AppCompatActivity {
     private EditText actorsET;
     private EditText imageET;
     private ImageView image;
-    private Film transfferedFilm;
+    private Film transferredFilm;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_film_information);
 
-        transfferedFilm=(Film)getIntent().getSerializableExtra(String.valueOf(R.string.Key_For_Transferring_Film));
+        transferredFilm =(Film)getIntent().getSerializableExtra(String.valueOf(R.string.Key_For_Transferring_Film));
 
         nameET=findViewById(R.id.nameET);
-        nameET.setText(transfferedFilm.getFilmName());
+        nameET.setText(transferredFilm.getFilmName());
         ratingET=findViewById(R.id.rateET);
-        ratingET.setText(transfferedFilm.getRating());
+        ratingET.setText(transferredFilm.getRating());
         actorsET=findViewById(R.id.actorsET);
-        actorsET.setText(transfferedFilm.getActors());
+        actorsET.setText(transferredFilm.getActors());
         imageET=findViewById(R.id.imageET);
-        imageET.setText(transfferedFilm.getImage());
+        imageET.setText(transferredFilm.getImage());
 
         image=findViewById(R.id.filmPicToUpdate);
-        Picasso.with(getBaseContext()).load(transfferedFilm.getImage()).into(image);
+        Picasso.with(getBaseContext()).load(transferredFilm.getImage()).into(image);
 
         //update films parameters
         findViewById(R.id.updateBtn).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String url = "https://third-assignment-films.herokuapp.com/film_list/"+transfferedFilm.getFilmName()+"";
+                String url = "https://third-assignment-films.herokuapp.com/film_list/"+ transferredFilm.getFilmName()+"";
                 final OkHttpClient client = new OkHttpClient();
 
                 MediaType JSON = MediaType.parse("application/json; charset=utf-8");
@@ -64,13 +65,9 @@ public class FilmInformation extends AppCompatActivity {
                 client.newCall(request).enqueue(new Callback() {
                     @Override
                     public void onFailure(Call call, IOException e) {
-                        //  Toast.makeText(getBaseContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
                     }
                     @Override
                     public void onResponse(Call call, Response response) throws IOException {
-                        String serverRespons = response.body().string();
-                        Log.e("+++++++++++++",serverRespons);
-
                         Intent intent=new Intent(getBaseContext(),MainActivity.class);
                         startActivity(intent);
                         }
@@ -81,3 +78,4 @@ public class FilmInformation extends AppCompatActivity {
     }
 
 }
+
