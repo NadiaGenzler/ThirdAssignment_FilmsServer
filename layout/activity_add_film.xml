@@ -3,32 +3,20 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".FilmInformation"
-    android:orientation="vertical">
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
-        <ImageView
-            android:layout_width="150dp"
-            android:layout_height="200dp"
-            android:id="@+id/filmPicToUpdate"/>
+    tools:context=".AddFilmActivity"
+    android:orientation="vertical"
+    android:gravity="center_horizontal"
+    >
+
         <EditText
             android:id="@+id/nameET"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:hint="film name"
-            android:textSize="25sp"
             android:minWidth="80dp"
-            android:paddingTop="50dp" />
-    </LinearLayout>
-
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="514dp"
-        android:gravity="center_horizontal"
-        android:orientation="vertical">
+            android:paddingTop="50dp"
+            android:textSize="25sp" />
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -76,6 +64,7 @@
                 android:paddingTop="50dp" />
 
         </LinearLayout>
+
         <EditText
             android:id="@+id/imageET"
             android:layout_width="wrap_content"
@@ -91,15 +80,12 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="40dp"
             android:text="Add your film to list" />
+
         <Button
             android:id="@+id/addFilmBtn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:text="Add John Wick to list" />
-
-    </LinearLayout>
-
-
-
+    
 </LinearLayout>
