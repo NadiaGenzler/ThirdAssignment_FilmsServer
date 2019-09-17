@@ -2,7 +2,8 @@
     <string name="app_name">ThirdAssignment_FilmList</string>
     <string name="action_settings">Settings</string>
     <string name="main_activity_header">Your Favorite Films</string>
-    <string name="title_activity_film_information">FilmInformation</string>
+    <string name="title_activity_film_information">About The Film</string>
+    <string name="title_activity_add_film">Choose a film</string>
     <string name="Key_For_Transferring_Film">KeyForTransferringFilm</string>
 
 </resources>
