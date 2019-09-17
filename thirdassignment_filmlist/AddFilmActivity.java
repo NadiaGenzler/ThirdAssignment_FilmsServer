@@ -52,14 +52,10 @@ public class AddFilmActivity extends AppCompatActivity {
                 client.newCall(request).enqueue(new Callback() {
                     @Override
                     public void onFailure(Call call, IOException e) {
-                        //  Toast.makeText(getBaseContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
                     }
 
                     @Override
                     public void onResponse(Call call, Response response) throws IOException {
-                        String serverRespons = response.body().string();
-                        Log.e("+++++++++++++", serverRespons);
-
                         Intent intent = new Intent(getBaseContext(), MainActivity.class);
                         startActivity(intent);
                     }
@@ -67,7 +63,7 @@ public class AddFilmActivity extends AppCompatActivity {
             }
         });
 
-        //add film that was chosen by me
+        //add film that was chosen by me-John Wick
         findViewById(R.id.addFilmBtn).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -85,18 +81,13 @@ public class AddFilmActivity extends AppCompatActivity {
                 client.newCall(request).enqueue(new Callback() {
                     @Override
                     public void onFailure(Call call, IOException e) {
-                        //  Toast.makeText(getBaseContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
                     }
 
                     @Override
                     public void onResponse(Call call, Response response) throws IOException {
-                        String serverRespons = response.body().string();
-                        Log.e("+++++++++++++", serverRespons);
-
                         Intent intent = new Intent(getBaseContext(), MainActivity.class);
                         startActivity(intent);
                     }
-
                 });
             }
         });
