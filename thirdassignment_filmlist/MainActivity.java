@@ -1,5 +1,6 @@
 package com.example.thirdassignment_filmlist;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -9,6 +10,7 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
@@ -34,28 +36,27 @@ public class MainActivity extends AppCompatActivity {
      ArrayList<Film> filmList;
      MyArrayAdapter adapter;
     ListView lv;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        FloatingActionButton addButton = findViewById(R.id.fab);
 
-        addButton.setOnClickListener(new View.OnClickListener() {
+        getTheList();
+
+        //add a new movie
+        findViewById(R.id.fab).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                addToList();
-
+                Intent intent=new Intent(getBaseContext(),AddFilmActivity.class);
+                startActivity(intent);
             }
         });
 
-        getTheList();
         onClicks();
-
-
     }
-
 
     //show the list
    public void getTheList(){
@@ -72,7 +73,6 @@ public class MainActivity extends AppCompatActivity {
        client.newCall(request).enqueue(new Callback() {
            @Override
            public void onFailure(Call call, IOException e) {
-               //  Toast.makeText(getBaseContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
            }
 
            @Override
@@ -83,8 +83,7 @@ public class MainActivity extends AppCompatActivity {
                    GsonBuilder gsonBuilder = new GsonBuilder();
                    Gson gson = gsonBuilder.create();
 
-                   filmList = gson.fromJson(serverRespons, new TypeToken<ArrayList<Film>>() {
-                   }.getType());
+                   filmList = gson.fromJson(serverRespons, new TypeToken<ArrayList<Film>>(){}.getType());
 
                    MainActivity.this.runOnUiThread(new Runnable() {
                        @Override
@@ -98,7 +97,6 @@ public class MainActivity extends AppCompatActivity {
                }
            }
        });
-
    }
 
    public void onClicks(){
@@ -119,59 +117,60 @@ public class MainActivity extends AppCompatActivity {
            @Override
            public boolean onItemLongClick(AdapterView<?> adapterView, final View view, int i, long l) {
                final int index=i;
-               final Film film;
+               showAlert(index,"Delete '" + filmList.get(index).getFilmName()+ "'",
+                       "Are you sure you want to delete "+filmList.get(index).getFilmName() +"?",view);
 
-               String url = "https://third-assignment-films.herokuapp.com/film_list/"+filmList.get(index).getFilmName()+"";
-               final OkHttpClient client = new OkHttpClient();
-               Request request = new Request.Builder().url(url).delete().build();
-
-               client.newCall(request).enqueue(new Callback() {
-                   @Override
-                   public void onFailure(Call call, IOException e) {
-                       //  Toast.makeText(getBaseContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
-                   }
-                   @Override
-                   public void onResponse(Call call, Response response) throws IOException {
-                       String serverRespons = response.body().string();
-                       Log.e("=====================",serverRespons);
-                       if (response.isSuccessful()) {
-
-                           MainActivity.this.runOnUiThread(new Runnable() {
-                               @Override
-                               public void run() {
-                                   Snackbar.make(view, "The film was deleted from the list", Snackbar.LENGTH_LONG)
-                                           .setAction("Undo", new View.OnClickListener() {
-                                               @Override
-                                               public void onClick(View view) {
-                                                   adapter.add(filmList.get(index));
-                                               }
-                                           }).show();
-                                   getTheList();
-                               }
-                           });
-                       }
-                   }
-               });
                return true;
            }
        });
-
    }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        adapter.notifyDataSetChanged();
-    }
+    public void showAlert(final int index, String title, String message,final View view){
+        AlertDialog.Builder builder=new AlertDialog.Builder(this);
+        builder.setCancelable(true);
+        builder.setTitle(title);
+        builder.setMessage(message);
+        builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
 
+                String url = "https://third-assignment-films.herokuapp.com/film_list/"+filmList.get(index).getFilmName()+"";
+                final OkHttpClient client = new OkHttpClient();
+                Request request = new Request.Builder().url(url).delete().build();
 
-    //add new movie
-    public void addToList() {
+                client.newCall(request).enqueue(new Callback() {
+                    @Override
+                    public void onFailure(Call call, IOException e) {
+                    }
+                    @Override
+                    public void onResponse(Call call, Response response) throws IOException {
+                        final String serverRespons = response.body().string();
 
-                Intent intent=new Intent(getBaseContext(),AddFilmActivity.class);
-                startActivity(intent);
+                        if (response.isSuccessful()) {
+                            MainActivity.this.runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
 
+                                    Snackbar.make(view, serverRespons, Snackbar.LENGTH_LONG).show();
+                                    getTheList();
+                                }
+                            });
+                        }
+                    }
+                });
+                dialogInterface.dismiss();
             }
+        });
+
+        builder.setNegativeButton("NO", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+
+                dialogInterface.dismiss();
+            }
+        });
+        builder.show();
+    }
 
 
 }
