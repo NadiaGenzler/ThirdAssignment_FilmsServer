@@ -23,7 +23,6 @@ public class MyArrayAdapter extends ArrayAdapter<Object> {
     public int _layout;
     public ArrayList<Film> _objects;
 
-
     public MyArrayAdapter(Context context, int layout, ArrayList objects) {
         super(context,layout,objects);
         _context = context;
@@ -52,10 +51,5 @@ public class MyArrayAdapter extends ArrayAdapter<Object> {
 
         return result;
     }
-
-
-
-
-
 }
 
